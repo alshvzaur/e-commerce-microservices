@@ -1,0 +1,6 @@
+package com.zaur.user_service.model;
+
+public enum Role {
+    USER,
+    ADMIN
+}
