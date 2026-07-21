@@ -1,4 +1,4 @@
-package com.zaur.product_service.security;
+package com.zaur.order_service.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -40,6 +39,10 @@ public class JwtUtil {
         return parseClaims(token).getSubject();
     }
 
+    public String extractRole(String token) {
+        return parseClaims(token).get("role").toString();
+    }
+
     // извлечение ид из токена
     public String extractUserId(String token) {
         return parseClaims(token).get("userId", String.class);
@@ -63,7 +66,4 @@ public class JwtUtil {
                 .getPayload(); // достаём содержимое (claims)
     }
 
-    public String extractRole(String token) {
-        return parseClaims(token).get("role", String.class);
-    }
 }

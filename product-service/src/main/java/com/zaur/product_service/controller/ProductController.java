@@ -40,5 +40,8 @@ public class ProductController {
         return productService.deleteById(id);
     }
 
-
+    @PatchMapping("/{id}/reduce-stock")
+    public ProductResponse reduceStock(@PathVariable UUID id, @RequestParam int quantity){
+        return productService.reduceStock(id, quantity);
+    }
 }

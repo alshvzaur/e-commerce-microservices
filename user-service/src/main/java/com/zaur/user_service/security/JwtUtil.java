@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import javax.print.DocFlavor;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,11 +24,12 @@ public class JwtUtil {
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
-    //генерация токена (берём username + когда выдан + дата истечения + подпписываем с secret_key) и собираем в JWT-строку
-    public String generateToken(String username, String role) {
+    //генерация токена (берём username + когда выдан + дата истечения + подписываем с secret_key) и собираем в JWT-строку
+    public String generateToken(String username, String role, UUID userId) {
         return Jwts.builder()
                 .subject(username)
                 .claim("role", role)
+                .claim("userId",  userId.toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 *60))
                 .signWith(secretKey)
@@ -41,6 +43,10 @@ public class JwtUtil {
     // извлечение роли из токена
     public String extractRole(String token) {
         return parseClaims(token).get("role", String.class);
+    }
+    // извлечение ид из токена
+    public String extractUserId(String token) {
+        return parseClaims(token).get("userId", String.class);
     }
 
     // проверка истечение токена. true если дата уже в прошлом

@@ -43,7 +43,7 @@ public class AuthController {
                 .build();
 
         User registeredUser = userService.saveUser(user);
-        AuthResponse authResponse = new AuthResponse(jwtUtil.generateToken(registeredUser.getUsername(), registeredUser.getRole().name()));
+        AuthResponse authResponse = new AuthResponse(jwtUtil.generateToken(registeredUser.getUsername(), registeredUser.getRole().name(), registeredUser.getId()));
 
         return authResponse;
     }
@@ -57,7 +57,7 @@ public class AuthController {
 
         User user = userService.findByUsername(loginRequest.getUsername());
 
-        AuthResponse authResponse = new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole().name()));
+        AuthResponse authResponse = new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole().name(),  user.getId()));
 
         return authResponse;
     }

@@ -1,4 +1,4 @@
-package com.zaur.product_service.security;
+package com.zaur.order_service.security;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +39,6 @@ public class SecurityConfig {
                 // /auth/** (регистрация, логин) — доступны всем без токена
                 // все остальные запросы — требуют валидный JWT-токен
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/product/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/product/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/product/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
