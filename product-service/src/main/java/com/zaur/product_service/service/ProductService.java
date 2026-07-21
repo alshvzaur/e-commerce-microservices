@@ -2,6 +2,7 @@ package com.zaur.product_service.service;
 
 import com.zaur.product_service.dto.ProductRequest;
 import com.zaur.product_service.dto.ProductResponse;
+import com.zaur.product_service.exception.InsufficientStockException;
 import com.zaur.product_service.exception.ProductNotFoundException;
 import com.zaur.product_service.mapper.ProductMapper;
 import com.zaur.product_service.model.Product;
@@ -10,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,16 @@ public class ProductService {
         }
     }
 
+    public ProductResponse reduceStock(UUID id, int quantity) {
+        Product product = getProductById(id).orElseThrow(()-> new ProductNotFoundException("Product not found:" + id));
 
+        if (quantity > product.getQuantity()){
+            throw new InsufficientStockException("Out of stock");
+        }else{
+            product.setQuantity(product.getQuantity() - quantity);
+        }
 
+        productRepository.save(product);
+        return productMapper.toResponse(product);
+    }
 }
