@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MyUserDetailService implements UserDetailsService {
-    //UserRepository userRepository;
+
     UserService userService;
 
     @Override
