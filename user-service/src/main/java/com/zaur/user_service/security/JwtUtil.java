@@ -1,6 +1,5 @@
 package com.zaur.user_service.security;
 
-import com.zaur.user_service.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import javax.print.DocFlavor;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
@@ -24,7 +22,7 @@ public class JwtUtil {
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
-    //генерация токена (берём username + когда выдан + дата истечения + подписываем с secret_key) и собираем в JWT-строку
+    //генерация токена (берём username (мы ещё добавили к ключу роль и user_id)+ когда выдан + дата истечения + подписываем с secret_key) и собираем в JWT-строку
     public String generateToken(String username, String role, UUID userId) {
         return Jwts.builder()
                 .subject(username)
