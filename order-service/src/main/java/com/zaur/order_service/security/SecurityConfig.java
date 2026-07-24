@@ -39,6 +39,8 @@ public class SecurityConfig {
                 // /auth/** (регистрация, логин) — доступны всем без токена
                 // все остальные запросы — требуют валидный JWT-токен
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
