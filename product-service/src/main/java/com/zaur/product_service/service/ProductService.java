@@ -79,4 +79,14 @@ public class ProductService {
         productRepository.save(product);
         return productMapper.toResponse(product);
     }
+
+    public List<ProductResponse> getProductsById(List<UUID> ids) {
+        List<ProductResponse> productResponseList = new ArrayList<>();
+        List<Product> products = productRepository.getProductsById(ids);
+        for (Product product : products) {
+            ProductResponse productResponse = productMapper.toResponse(product);
+            productResponseList.add(productResponse);
+        }
+        return productResponseList;
+    }
 }

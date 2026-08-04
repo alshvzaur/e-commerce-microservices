@@ -2,11 +2,9 @@ package com.zaur.order_service.client;
 
 import com.zaur.order_service.dto.ProductResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "product-service", url = "${product.service.url}")
@@ -17,4 +15,7 @@ public interface ProductClient {
 
     @PatchMapping("/product/{id}/reduce-stock")
     ProductResponse reduceStock(@PathVariable UUID id, @RequestParam int quantity);
+
+    @PostMapping("/product/products/bu-ids")
+    List<ProductResponse> getProductsByIds(@RequestBody List<UUID> ids);
 }

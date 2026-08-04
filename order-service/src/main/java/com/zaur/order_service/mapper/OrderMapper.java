@@ -12,8 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -27,8 +26,21 @@ public class OrderMapper {
 
         List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
 
+        List<UUID> uuidList = new ArrayList<>();
+
         for (OrderItem orderItem : order.getOrderItems()) {
-            ProductResponse productResponse = productClient.getProductById(orderItem.getProductId());
+            uuidList.add(orderItem.getProductId());
+        }
+
+        List<ProductResponse> productResponseList = productClient.getProductsByIds(uuidList);
+
+        Map<UUID, ProductResponse> productResponseMap = new HashMap<>();
+        for(ProductResponse productResponse : productResponseList) {
+            productResponseMap.put(productResponse.getId(), productResponse);
+        }
+
+        for (OrderItem orderItem : order.getOrderItems()) {
+            ProductResponse productResponse = productResponseMap.get(orderItem.getProductId());
 
             OrderItemResponse orderItemResponse = OrderItemResponse.builder()
                     .productName(productResponse.getName())
