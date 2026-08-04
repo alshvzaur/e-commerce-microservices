@@ -44,4 +44,9 @@ public class ProductController {
     public ProductResponse reduceStock(@PathVariable UUID id, @RequestParam int quantity){
         return productService.reduceStock(id, quantity);
     }
+
+    @PostMapping("/products/by-ids")
+    public List<ProductResponse> getProductsByIds(@RequestBody List<UUID> ids) {
+        return productService.getProductsById(ids);
+    }
 }
