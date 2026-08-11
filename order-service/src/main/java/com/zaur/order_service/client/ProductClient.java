@@ -16,6 +16,6 @@ public interface ProductClient {
     @PatchMapping("/product/{id}/reduce-stock")
     ProductResponse reduceStock(@PathVariable UUID id, @RequestParam int quantity);
 
-    @PostMapping("/product/products/bu-ids")
+    @PostMapping("/product/products/by-ids")
     List<ProductResponse> getProductsByIds(@RequestBody List<UUID> ids);
 }
