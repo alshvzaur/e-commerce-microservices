@@ -1,5 +1,6 @@
 package com.zaur.product_service.service;
 
+import com.zaur.product_service.dto.ProductRequest;
 import com.zaur.product_service.dto.ProductResponse;
 import com.zaur.product_service.exception.InsufficientStockException;
 import com.zaur.product_service.exception.ProductNotFoundException;
@@ -90,5 +91,97 @@ public class ProductServiceTest {
         when(productRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(ProductNotFoundException.class, () -> productService.reduceStock(id, 10));
+    }
+
+    @Test
+    void shouldFindProductById(){
+        UUID id = UUID.randomUUID();
+
+        Product product = Product.builder()
+                .id(id)
+                .name("Test")
+                .description("Test")
+                .price(new BigDecimal("100.00"))
+                .quantity(14)
+                .build();
+
+        ProductResponse expectedResponse = ProductResponse.builder().id(id).name("Test").build();
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+        when(productMapper.toResponse(product)).thenReturn(expectedResponse);
+
+        ProductResponse result = productService.findById(id);
+
+        assertEquals(expectedResponse, result);
+    }
+
+    @Test
+    void shouldSaveProduct(){
+        UUID id = UUID.randomUUID();
+
+        Product product = Product.builder()
+                .id(id)
+                .name("Test")
+                .description("Test")
+                .price(new BigDecimal("200.00"))
+                .quantity(12)
+                .build();
+
+        ProductRequest productRequest = ProductRequest.builder()
+                        .name("Test")
+                        .description("Test")
+                        .price(new BigDecimal("200.00"))
+                        .quantity(12)
+                        .build();
+
+        ProductResponse productResponse = ProductResponse.builder()
+                .id(id)
+                .name("Test")
+                .description("Test")
+                .price(new BigDecimal("200.00"))
+                .quantity(12)
+                .build();
+
+        when(productMapper.toEntity(productRequest)).thenReturn(product);
+        when(productMapper.toResponse(product)).thenReturn(productResponse);
+        when(productRepository.save(product)).thenReturn(product);
+
+        ProductResponse result = productService.save(productRequest);
+
+        assertEquals(result, productResponse);
+
+
+    }
+
+    @Test
+    void shouldDeleteProductWhenExists(){
+        UUID id = UUID.randomUUID();
+
+        Product product = Product.builder()
+                .id(id)
+                .name("Test")
+                .description("Test")
+                .price(new BigDecimal("100.00"))
+                .quantity(14)
+                .build();
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+
+        Boolean result = productService.deleteById(id);
+        assertTrue(result);
+
+        verify(productRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void shouldNotDeleteProductWhenNotExists(){
+        UUID id = UUID.randomUUID();
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+
+        Boolean result = productService.deleteById(id);
+        assertFalse(result);
+
+        verify(productRepository, never()).deleteById(id);
     }
 }
