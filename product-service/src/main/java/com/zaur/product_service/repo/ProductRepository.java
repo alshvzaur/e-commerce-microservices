@@ -12,6 +12,4 @@ import java.util.UUID;
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
 
-    List<Product> getProductsById(List<UUID> ids);
-
 }
