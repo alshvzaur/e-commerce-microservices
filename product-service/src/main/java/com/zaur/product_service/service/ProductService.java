@@ -81,7 +81,7 @@ public class ProductService {
 
     public List<ProductResponse> getProductsById(List<UUID> ids) {
         List<ProductResponse> productResponseList = new ArrayList<>();
-        List<Product> products = productRepository.getProductsById(ids);
+        List<Product> products = productRepository.findAllById(ids);
         for (Product product : products) {
             ProductResponse productResponse = productMapper.toResponse(product);
             productResponseList.add(productResponse);
